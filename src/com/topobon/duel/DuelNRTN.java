@@ -29,12 +29,14 @@ package com.topobon.duel;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
+import com.topobon.duel.arena.ArenaManager;
+import com.topobon.duel.commands.DuelCommands;
+import com.topobon.duel.utils.ConfigManager;
 
 /**
  * <b>Team Death Match Extreme - NRTN </b>
@@ -43,8 +45,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  * <p>
  * The main purpose of this class is to:
  * <ul>
- * <li>Hold a custom class called Logo which holds Logo Object and make a new Initial / Chevron
- * <li>Registers Commands 
+ * <li>Hold a custom class called Logo which holds Logo Object and make a new
+ * Initial / Chevron
+ * <li>Registers Commands
  * <li>Registers Events
  * </ul>
  * 
@@ -58,10 +61,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class DuelNRTN extends JavaPlugin {
 	private static Logo logo; // Logo object
-	
+
 	private static Logo infoLogo;
-	
-	
+	public static DuelNRTN instance;
+
 	/**
 	 * Method: Calls when class runs {@link #getPluginLoader()}
 	 * <p>
@@ -74,80 +77,82 @@ public class DuelNRTN extends JavaPlugin {
 	 * <li>Register Events
 	 * <li>Register Commands
 	 */
-	
+
 	public void onEnable() {
-	//	new TeamDeathMatch(this);
-	//	new GameManager(this);
+		// new TeamDeathMatch(this);
+		// new GameManager(this);
+		instance = this;
+		
+//
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance, 0);
+		// System.out.println("test");
+		if (cm.exists()) {
+			FileConfiguration fc = cm.getConfig();
+			// System.out.println("test created");
+			int arenaSize = fc.getInt("latestArena");
+			ArenaManager.getManager().arenaSize = arenaSize;
+			System.out.println(arenaSize);
+		}
+		
+	
+		//getConfig().addDefault("latestArena", 1);
 		setLogo(ChatColor.translateAlternateColorCodes('&', "&7&l[&6&lNaruto &c&lRTN&7&l] &r"));
 		setInfoLogo(ChatColor.translateAlternateColorCodes('&', "&8&l[&6Info&8&l] &r"));
 		/**
 		 * Talks about the TDM plugin and its state
 		 * 
 		 */
-		System.out.println(logo.getLogo() + "TEAM DEATH MATCH Plugin has been deployed");
-		System.out.println(logo.getLogo() + "Initiating Server Sequence....");
-		System.out.println(logo.getLogo() + "TEAM DEATH MATCH Plugin is ready to be used!");
+	
 		// Registering Commands
-	//	this.getCommand("tdm").setExecutor(new TeamDeathMatchNRTNCommands(this));
+		this.getCommand("duel").setExecutor(new DuelCommands(this));
 		// Registering Events
-	//	Bukkit.getPluginManager().registerEvents(new PlayerDeath(this), this);
-		//Bukkit.getPluginManager().registerEvents(new PlayerFriendlyFire(this), this);
+		// Bukkit.getPluginManager().registerEvents(new PlayerDeath(this),
+		// this);
+		// Bukkit.getPluginManager().registerEvents(new
+		// PlayerFriendlyFire(this), this);
+		
 	}
-	/**
-	 * <b> Sets Game Rules <b>
-	 * Method: Calls when class runs {@link #getPluginLoader()}
-	 * <p>
-	 * It's work is to:
-	 * <p>
-	 * <ul>
-	 * <li>TeamDeathMacth#setTotalPoints (Integer)
-	 * <li>TeamDeathMatch#setFriendlyFireOn (Boolean)
-	 * <li>TeamDeathMacth#setTimeLimit (Boolean)
-	 * <ul>
-	 */
-	public static void setGameInfo(){
-//		TeamDeathMatch.setTotalPoints(30); // Total number of scores to win
-	//	TeamDeathMatch.setFriendlFireOn(true);
-	//	TeamDeathMatch.setTimeLimit(15); 
+	
 
-	}
-	
+
 	/**
-	 * Method: returns logo Object and calls #getLogo() 
-	 * Method from the {@linkplain Logo.class}
-	 *  
-	 * @return Logo Object to #getLogo()  
+	 * Method: returns logo Object and calls #getLogo() Method from the
+	 * {@linkplain Logo.class}
+	 * 
+	 * @return Logo Object to #getLogo()
 	 */
-	public static String getInitials(){
-		
+	public static String getInitials() {
+
 		return logo.getLogo();
 	}
-	
+
 	/**
 	 * 
-	 * @param string - to set Logo
+	 * @param string
+	 *            - to set Logo
 	 */
-	public static void setLogo(String string){
+	public static void setLogo(String string) {
 		logo = new Logo(string);
 	}
-	
+
 	/**
-	 * Method: returns logo Object and calls #getLogo() 
-	 * Method from the {@linkplain Logo.class}
-	 *  
-	 * @return Logo Object to #getLogo()  
+	 * Method: returns logo Object and calls #getLogo() Method from the
+	 * {@linkplain Logo.class}
+	 * 
+	 * @return Logo Object to #getLogo()
 	 */
-	public static String getInfoInitials(){
-		
-		return logo.getLogo();
+	public static String getInfoInitials() {
+
+		return infoLogo.getLogo();
 	}
-	
+
 	/**
 	 * 
-	 * @param string - to set Logo
+	 * @param string
+	 *            - to set Logo
 	 */
-	public static void setInfoLogo(String string){
-		logo = new Logo(string);
+	public static void setInfoLogo(String string) {
+		infoLogo = new Logo(string);
 	}
-	
+
 }
