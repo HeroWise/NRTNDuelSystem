@@ -59,6 +59,48 @@ public class ArenaManager {
 
 		return null; // Not found
 	}
+	
+	public List<Arena> getAllArenas(){
+		return arenas;
+	}
+
+	public void loadArenas() {
+
+		// ConfigManager cm = new ConfigManager(DuelNRTN.instance, 0);
+		// // System.out.println("test");
+		// if (cm.exists()) {
+		// FileConfiguration fc = cm.getConfig();
+		// // System.out.println("test created");
+		//
+		// ArenaManager.getManager().arenaSize = arenaSize;
+		// System.out.println(arenaSize);
+		// }
+		try {
+			for (int i = 1; i <= arenaSize; i++) {
+				ConfigManager cm = new ConfigManager(DuelNRTN.instance, i);
+				cm.getFile().getName();	
+				if (cm.exists()) {
+					FileConfiguration fc = cm.getConfig();
+					// System.out.println("test created");
+					int arenaSize = fc.getInt("latestArena");
+					ArenaManager.getManager().arenaSize = arenaSize;
+					System.out.println(arenaSize);
+				}
+				
+				double x = 3603;
+				double y = 55;
+				double z = -4158;
+
+				// Temp locations
+				Arena a = new Arena(new Location(Bukkit.getWorld("FlatLands"), x, y, z),
+						new Location(Bukkit.getWorld("FlatLands"), x, y, z), i);
+				a.load();
+				this.arenas.add(a);
+			}
+		} catch (Exception e) {
+
+		}
+	}
 
 	/**
 	 * Adds the player to an arena
@@ -162,27 +204,27 @@ public class ArenaManager {
 			// f.set("Arena-object", a);
 			// f.set("Arena-no", arenaSize);
 			f.set("location1.x", l1.getX());
-			f.set("location1.x", l1.getX());
+
 			f.set("location1.y", l1.getY());
 			f.set("location1.z", l1.getY());
-			f.set("location1.world", l1.getWorld());
+
 			f.set("location2.x", l2.getX());
 			f.set("location2.y", l2.getY());
 			f.set("location2.z", l2.getY());
-			f.set("location2.world", l1.getWorld());
+
 			cm.saveConfig();
 		}
 		ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, 0);
 		if (!cm1.exists()) {
 			FileConfiguration f1 = cm1.getConfig();
 			f1.set("latestArena", arenaSize);
-		//	System.out.println("Set new Arena Size");
+			// System.out.println("Set new Arena Size");
 			cm1.saveConfig();
 		}
 		if (cm1.exists()) {
 			FileConfiguration f1 = cm1.getConfig();
 			f1.set("latestArena", arenaSize);
-			//System.out.println("Set new Arena Size");
+			// System.out.println("Set new Arena Size");
 			cm1.saveConfig();
 		}
 

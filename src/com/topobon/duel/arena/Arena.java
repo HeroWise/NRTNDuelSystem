@@ -20,6 +20,7 @@ public class Arena {
 	private final int id;
 	private Location locA;
 	private Location locB;
+	private boolean isEnabled;
 	private List<UUID> players = new ArrayList<UUID>();
 
 	public Arena(Location location1, Location location2, int id) {
@@ -39,11 +40,11 @@ public class Arena {
 	}
 
 	public void load() {
-		setLocationA();
-		setLocationB();
+		loadLocationA();
+		loadLocationB();
 	}
-
-	public void setLocationA() {
+	
+	public void loadLocationA() {
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
 		if (!cm.exists()) {
 
@@ -58,8 +59,53 @@ public class Arena {
 			this.locA = new Location(world, x, y, z);
 		}
 	}
+	public void setLocationA(Location location) {
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		Location l1 = location;
+		FileConfiguration f = cm.getConfig();
+		if (!cm.exists()) {
 
-	public void setLocationB() {
+		
+			f.set("location1.x", l1.getX());
+			f.set("location1.x", l1.getX());
+			f.set("location1.y", l1.getY());
+			f.set("location1.z", l1.getY());
+	
+			cm.saveConfig();
+		} else {
+			f.set("location1.x", l1.getX());
+			f.set("location1.x", l1.getX());
+			f.set("location1.y", l1.getY());
+			f.set("location1.z", l1.getY());
+	
+		
+			cm.saveConfig();
+		}
+	}
+	public void setLocationB(Location location) {
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		Location l1 = location;
+		FileConfiguration f = cm.getConfig();
+		if (!cm.exists()) {
+
+		
+			f.set("location2.x", l1.getX());
+			f.set("location2.x", l1.getX());
+			f.set("location2.y", l1.getY());
+			f.set("location2.z", l1.getY());
+		
+		
+			cm.saveConfig();
+		} else {
+			f.set("location2.x", l1.getX());
+			f.set("location2.x", l1.getX());
+			f.set("location2.y", l1.getY());
+			f.set("location2.z", l1.getY());
+
+			cm.saveConfig();
+		}
+	}
+	public void loadLocationB() {
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
 		if (!cm.exists()) {
 
@@ -74,6 +120,9 @@ public class Arena {
 			this.locB = new Location(world, x, y, z);
 		}
 	}
+	
+	
+	
 
 	public Location getLocationA() {
 		return locA;
@@ -81,5 +130,13 @@ public class Arena {
 
 	public Location getLocationB() {
 		return locB;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 }

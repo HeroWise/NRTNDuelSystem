@@ -35,64 +35,77 @@ public class DuelCommands implements CommandExecutor {
 			}
 
 			if (args.length > 0) {
+				if (args[0].equalsIgnoreCase("create") && sender instanceof Player) {
+					Player pSender = (Player) sender;
+					Player p = (Player) sender;
+					ArenaManager.getManager().createArena(p.getLocation(), p.getLocation().add(0, 0, 2));
+					p.sendMessage(Utility.sendInfo("&aSuccessfully created Arena!"));
+					
+					p.sendMessage(Utility.sendInfo("This Arena's ID is: &6" + ArenaManager.getManager().arenaSize));
+					// Create
+					
+					
+
+				}
 				if (args[0].equalsIgnoreCase("list") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-
-					// ArenaManager.getManager().loadArenas(p);
-					// for(int i = 1; i <=
-					// DuelNRTN.instance.getConfig().getInt("latestArena");
-					// i++){
-					// ConfigManager cm = new ConfigManager(DuelNRTN.instance,
-					// i);
-					//
-					// p.sendMessage(cm.getConfig().getDouble("Location1.x")+ "
-					// TESTSTT");
-					// }
+					for(Arena arena: ArenaManager.getManager().getAllArenas()){
+						p.sendMessage(Utility.decodeMessage("&b "+ arena.getId() +""));
+					}
+					p.sendMessage(Utility.decodeMessage("&bare the Arena IDs"));		
 
 				}
 
 				if (args[0].equalsIgnoreCase("initiate") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-					p.sendMessage(Utility.sendInfo("&aInitiated Duel plugin! Instantiating DefaultArenaConfig with id '0'"));
+					p.sendMessage(
+							Utility.sendInfo("&aInitiated Duel plugin! Instantiating DefaultArenaConfig with id '0'"));
 					p.sendMessage(Utility.sendInfo("&aComplete!"));
 					ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, 0);
 					if (!cm1.exists()) {
 						FileConfiguration f1 = cm1.getConfig();
 						f1.set("latestArena", 0);
-						System.out.println("Set new Arena Size");
+						// System.out.println("Set new Arena Size");
 						cm1.saveConfig();
 					}
 					if (cm1.exists()) {
 						FileConfiguration f1 = cm1.getConfig();
 						f1.set("latestArena", ArenaManager.getManager().arenaSize);
-						System.out.println("Set new Arena Size");
+						// System.out.println("Set new Arena Size");
 						cm1.saveConfig();
 					}
 
 				}
-				if (args[0].equalsIgnoreCase("create") && sender instanceof Player) {
+
+				if (args[0].equalsIgnoreCase("setLocationA") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-					p.sendMessage(Utility.sendInfo("&aSuccessfully created Arena!"));
-					// Create
-					ArenaManager.getManager().createArena(p.getLocation(), p.getLocation().add(0, 0, 2));
-
-					// Join
-					// int num = 0;
-					// try {
-					// num = Integer.parseInt(args[1]);
-					// } catch (NumberFormatException e) {
-					// p.sendMessage("Invalid arena ID");
-					// return;
-					// }
-					// ArenaManager.getManager().addPlayer(p, num);
-
-					// Leave
-					// ArenaManager.getManager().removePlayer(p);
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setLocationA <id for arena>"));
+						return true;
+					}
+					Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
+					arena.setLocationA(p.getLocation());
+					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location A for Arena: "+ args[1]));
+				
 
 				}
+				if (args[0].equalsIgnoreCase("setLocationB") && sender instanceof Player) {
+					Player pSender = (Player) sender;
+					Player p = (Player) sender;
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setLocationB <id for arena>"));
+						return true;
+					}
+					Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
+					arena.setLocationB(p.getLocation());
+					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location B for Arena: "+ args[1]));
+				
+
+				}
+			
 			}
 		}
 		return true;
