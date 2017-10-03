@@ -38,22 +38,24 @@ public class DuelCommands implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("create") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-					ArenaManager.getManager().createArena(p.getLocation(), p.getLocation().add(0, 0, 2));
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d create <Name for Arena>"));
+						return true;
+					}
+					ArenaManager.getManager().createArena(args[1], p.getLocation(), p.getLocation().add(0, 0, 2));
 					p.sendMessage(Utility.sendInfo("&aSuccessfully created Arena!"));
-					
-					p.sendMessage(Utility.sendInfo("This Arena's ID is: &6" + ArenaManager.getManager().arenaSize));
+
+					p.sendMessage(Utility.sendInfo("This Arena's ID is: &6" + ArenaManager.getManager().arenaSize+"&r\n Please use this if you want to edit arena information!"));
 					// Create
-					
-					
 
 				}
 				if (args[0].equalsIgnoreCase("list") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-					for(Arena arena: ArenaManager.getManager().getAllArenas()){
-						p.sendMessage(Utility.decodeMessage("&b "+ arena.getId() +""));
+					for (Arena arena : ArenaManager.getManager().getAllArenas()) {
+						p.sendMessage(Utility.decodeMessage("&b " + arena.getId() + ""));
 					}
-					p.sendMessage(Utility.decodeMessage("&bare the Arena IDs"));		
+					p.sendMessage(Utility.decodeMessage("&bare the Arena IDs"));
 
 				}
 
@@ -88,8 +90,7 @@ public class DuelCommands implements CommandExecutor {
 					}
 					Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
 					arena.setLocationA(p.getLocation());
-					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location A for Arena: "+ args[1]));
-				
+					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location A for Arena: " + args[1]));
 
 				}
 				if (args[0].equalsIgnoreCase("setLocationB") && sender instanceof Player) {
@@ -101,11 +102,10 @@ public class DuelCommands implements CommandExecutor {
 					}
 					Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
 					arena.setLocationB(p.getLocation());
-					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location B for Arena: "+ args[1]));
-				
+					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location B for Arena: " + args[1]));
 
 				}
-			
+
 			}
 		}
 		return true;

@@ -18,9 +18,10 @@ public class Arena {
 
 	// Ofc, this CAN'T be the ID COULD IT? (jk)
 	private final int id;
+	private String name;
+	private boolean isEnabled;
 	private Location locA;
 	private Location locB;
-	private boolean isEnabled;
 	private List<UUID> players = new ArrayList<UUID>();
 
 	public Arena(Location location1, Location location2, int id) {
@@ -42,6 +43,7 @@ public class Arena {
 	public void load() {
 		loadLocationA();
 		loadLocationB();
+		loadName();
 	}
 	
 	public void loadLocationA() {
@@ -59,52 +61,6 @@ public class Arena {
 			this.locA = new Location(world, x, y, z);
 		}
 	}
-	public void setLocationA(Location location) {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
-		Location l1 = location;
-		FileConfiguration f = cm.getConfig();
-		if (!cm.exists()) {
-
-		
-			f.set("location1.x", l1.getX());
-			f.set("location1.x", l1.getX());
-			f.set("location1.y", l1.getY());
-			f.set("location1.z", l1.getY());
-	
-			cm.saveConfig();
-		} else {
-			f.set("location1.x", l1.getX());
-			f.set("location1.x", l1.getX());
-			f.set("location1.y", l1.getY());
-			f.set("location1.z", l1.getY());
-	
-		
-			cm.saveConfig();
-		}
-	}
-	public void setLocationB(Location location) {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
-		Location l1 = location;
-		FileConfiguration f = cm.getConfig();
-		if (!cm.exists()) {
-
-		
-			f.set("location2.x", l1.getX());
-			f.set("location2.x", l1.getX());
-			f.set("location2.y", l1.getY());
-			f.set("location2.z", l1.getY());
-		
-		
-			cm.saveConfig();
-		} else {
-			f.set("location2.x", l1.getX());
-			f.set("location2.x", l1.getX());
-			f.set("location2.y", l1.getY());
-			f.set("location2.z", l1.getY());
-
-			cm.saveConfig();
-		}
-	}
 	public void loadLocationB() {
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
 		if (!cm.exists()) {
@@ -120,6 +76,72 @@ public class Arena {
 			this.locB = new Location(world, x, y, z);
 		}
 	}
+	public void loadName() {
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		if (!cm.exists()) {
+
+			FileConfiguration f = cm.getConfig();
+
+			name = f.getString("Areba-Name");
+			isEnabled = f.getBoolean("isEnabled");
+			
+			cm.saveConfig();
+			
+		}
+	}
+	public void setLocationA(Location location) {
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		Location l1 = location;
+		FileConfiguration f = cm.getConfig();
+		if (!cm.exists()) {
+
+			f.set("Arena-Name", name);
+			f.set("isEnabled", false);
+			f.set("location1.x", l1.getX());
+			f.set("location1.x", l1.getX());
+			f.set("location1.y", l1.getY());
+			f.set("location1.z", l1.getY());
+	
+			cm.saveConfig();
+		} else {
+			f.set("Arena-Name", name);
+			f.set("isEnabled", false);
+			f.set("location1.x", l1.getX());
+			f.set("location1.x", l1.getX());
+			f.set("location1.y", l1.getY());
+			f.set("location1.z", l1.getY());
+	
+		
+			cm.saveConfig();
+		}
+	}
+	public void setLocationB(Location location) {
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		Location l1 = location;
+		FileConfiguration f = cm.getConfig();
+		if (!cm.exists()) {
+
+			f.set("Arena-Name", name);
+			f.set("isEnabled", false);
+			f.set("location2.x", l1.getX());
+			f.set("location2.x", l1.getX());
+			f.set("location2.y", l1.getY());
+			f.set("location2.z", l1.getY());
+		
+		
+			cm.saveConfig();
+		} else {
+			f.set("Arena-Name", name);
+			f.set("isEnabled", false);
+			f.set("location2.x", l1.getX());
+			f.set("location2.x", l1.getX());
+			f.set("location2.y", l1.getY());
+			f.set("location2.z", l1.getY());
+
+			cm.saveConfig();
+		}
+	}
+
 	
 	
 	
@@ -138,5 +160,13 @@ public class Arena {
 
 	public void setEnabled(boolean isEnabled) {
 		this.isEnabled = isEnabled;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
