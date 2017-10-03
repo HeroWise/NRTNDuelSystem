@@ -9,7 +9,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.topobon.duel.DuelNRTN;
 import com.topobon.duel.utils.ConfigManager;
+import com.topobon.duel.utils.Utility;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +24,7 @@ public class ArenaManager {
 	private static ArenaManager am;
 
 	// Player data
-	private final Map<UUID, Location> locs = new HashMap<UUID, Location>();
+	private final Map<Player, Location> locs = new HashMap<Player, Location>();
 	// private final Map<UUID, ItemStack[]> inv = new HashMap<UUID,
 	// ItemStack[]>();
 	// private final Map<UUID, ItemStack[]> armor = new HashMap<UUID,
@@ -59,8 +61,8 @@ public class ArenaManager {
 
 		return null; // Not found
 	}
-	
-	public List<Arena> getAllArenas(){
+
+	public List<Arena> getAllArenas() {
 		return arenas;
 	}
 
@@ -75,27 +77,39 @@ public class ArenaManager {
 		// ArenaManager.getManager().arenaSize = arenaSize;
 		// System.out.println(arenaSize);
 		// }
-	
-		
+
 		try {
 			for (int i = 1; i <= arenaSize; i++) {
 				ConfigManager cm = new ConfigManager(DuelNRTN.instance, i);
-				//cm.getFile().getName();	
-			
-				
-				double x = 3603;
-				double y = 55;
-				double z = -4158;
+				// cm.getFile().getName();
+
+				double x = 0;
+				double y = 0;
+				double z = 0;
 
 				// Temp locations
-				Arena a = new Arena(new Location(Bukkit.getWorld("FlatLands"), x, y, z),
-						new Location(Bukkit.getWorld("FlatLands"), x, y, z), i, null);
+				Arena a = new Arena(new Location(Bukkit.getWorld("world"), x, y, z),
+						new Location(Bukkit.getWorld("world"), x, y, z), i, null);
 				a.load();
 				this.arenas.add(a);
 			}
 		} catch (Exception e) {
 
 		}
+	}
+
+	public Boolean addPlayers(Player player1, Player player2) {
+		for (Arena a : arenas) {
+			if (a.getPlayers().isEmpty()) {
+				
+				
+				
+				addPlayer(player1, player2, a.getId());
+
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -111,33 +125,32 @@ public class ArenaManager {
 	 * @param i
 	 *            the arena ID. A check will be done to ensure its validity.
 	 */
-	public void addPlayer(Player p, int i) {
+	public void addPlayer(Player p, Player p2, int i) {
 		Arena a = this.getArena(i);
 		if (a == null) {
 			p.sendMessage("Invalid arena!");
 			return;
 		}
 
-		if (this.isInGame(p)) {
+		if (this.isInGame(p) || this.isInGame(p2)) {
 			p.sendMessage("Cannot join more than 1 game!");
 			return;
 		}
 
 		// Adds the player to the arena player list
-		a.getPlayers().add(p.getUniqueId());
-
-		// Clear inventory and armor
-		// p.getInventory().setArmorContents(null);
-		// p.getInventory().clear();
+		a.getPlayers().add(p);
 
 		// Save the players's last location before joining,
 		// then teleporting them to the arena spawn
-		locs.put(p.getUniqueId(), p.getLocation());
+		locs.put(p, p.getLocation());
 
-		if (a.getPlayers().size() == 0) {
+		if (a.getPlayers().size() == 1) {
 			p.teleport(a.getLocationA());
-		} else {
-			p.teleport(a.getLocationB());
+			a.getPlayers().add(p2);
+		}
+
+		if ((a.getPlayers().size() == 2)) {
+			p2.teleport(a.getLocationB());
 		}
 
 	}
@@ -158,25 +171,32 @@ public class ArenaManager {
 
 		// Searches each arena for the player
 		for (Arena arena : this.arenas) {
-			if (arena.getPlayers().contains(p.getUniqueId()))
+			if (arena.getPlayers().contains(p))
 				a = arena;
 		}
 
 		// Check arena validity
 		if (a == null) {
-			p.sendMessage("Invalid operation!");
+			p.sendMessage("Arena doesn't exist!");
 			return;
 		}
 
 		// Remove from arena player lost
-		a.getPlayers().remove(p.getName());
+		a.getPlayers().remove(p);
 
 		// Teleport to original location, remove it too
-		p.teleport(locs.get(p.getUniqueId()));
-		locs.remove(p.getUniqueId());
+		p.teleport(locs.get(p));
+		locs.remove(p);
 
 		// Heh, you're safe now :)
 		p.setFireTicks(0);
+	}
+
+	public void setWinner(Player player, Player defeated) {
+		Bukkit.broadcastMessage(
+				Utility.messageToPlayer("&6" + player.getDisplayName()+ " &b has claimed victory against &6" + defeated.getDisplayName() +" &b with &6&l"+player.getHealth()+" &6hearts&b!"));
+		removePlayer(player);
+		removePlayer(defeated);
 	}
 
 	/**
@@ -187,7 +207,7 @@ public class ArenaManager {
 	 * @return the arena created
 	 */
 	public Arena createArena(Location l1, Location l2, String arenaName) {
-		
+
 		this.arenaSize++;
 
 		Arena a = new Arena(l1, l2, this.arenaSize, arenaName);
@@ -239,8 +259,9 @@ public class ArenaManager {
 	 */
 	public boolean isInGame(Player p) {
 		for (Arena a : this.arenas) {
-			if (a.getPlayers().contains(p.getUniqueId()))
+			if (a.getPlayers().contains(p)) {
 				return true;
+			}
 		}
 		return false;
 	}

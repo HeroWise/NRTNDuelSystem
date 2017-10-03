@@ -36,6 +36,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.topobon.duel.arena.ArenaManager;
 import com.topobon.duel.commands.DuelCommands;
+import com.topobon.duel.events.PlayerDeath;
 import com.topobon.duel.utils.ConfigManager;
 
 /**
@@ -106,10 +107,8 @@ public class DuelNRTN extends JavaPlugin {
 		// Registering Commands
 		this.getCommand("duel").setExecutor(new DuelCommands(this));
 		// Registering Events
-		// Bukkit.getPluginManager().registerEvents(new PlayerDeath(this),
-		// this);
-		// Bukkit.getPluginManager().registerEvents(new
-		// PlayerFriendlyFire(this), this);
+		 Bukkit.getPluginManager().registerEvents(new PlayerDeath(this), this);
+		
 		
 	}
 	

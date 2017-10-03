@@ -74,7 +74,7 @@ public class DuelCommands implements CommandExecutor {
 						// System.out.println("Set new Arena Size");
 						cm1.saveConfig();
 					}
-					
+
 					// Create
 
 				}
@@ -94,7 +94,90 @@ public class DuelCommands implements CommandExecutor {
 					p.sendMessage(Utility.decodeMessage("&bare the Arena IDs"));
 
 				}
+				if (args[0].equalsIgnoreCase("stateloc") && sender instanceof Player) {
+					Player pSender = (Player) sender;
+					Player p = (Player) sender;
 
+					p.sendMessage(Utility.decodeMessage(
+							"&bA: " + ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationA()));
+					p.sendMessage(Utility.decodeMessage(
+							"&bB:" + ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationB()));
+				}
+				
+				if (args[0].equalsIgnoreCase("enabled") && sender instanceof Player) {
+					Player pSender = (Player) sender;
+					Player p = (Player) sender;
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setName <Name for Arena>"));
+						return true;
+					}
+					ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, 0);
+					if (!cm1.exists()) {
+						FileConfiguration f1 = cm1.getConfig();
+						f1.set("isEnabled", true);
+						// System.out.println("Set new Arena Size");
+						cm1.saveConfig();
+					}
+					if (cm1.exists()) {
+						FileConfiguration f1 = cm1.getConfig();
+						f1.set("isEnabled", true);
+						// System.out.println("Set new Arena Size");
+						cm1.saveConfig();
+					}
+					
+				}
+				
+				//FIX
+				if (args[0].equalsIgnoreCase("disable") && sender instanceof Player) {
+					Player pSender = (Player) sender;
+					Player p = (Player) sender;
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setName <Name for Arena>"));
+						return true;
+					}
+					ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, 0);
+					if (!cm1.exists()) {
+						FileConfiguration f1 = cm1.getConfig();
+						f1.set("isEnabled", false);
+						// System.out.println("Set new Arena Size");
+						cm1.saveConfig();
+					}
+					if (cm1.exists()) {
+						FileConfiguration f1 = cm1.getConfig();
+						f1.set("isEnabled", false);
+						// System.out.println("Set new Arena Size");
+						cm1.saveConfig();
+					}
+					
+				}
+
+				if (args[0].equalsIgnoreCase("fight") && sender instanceof Player) {
+					Player p = (Player) sender;
+					Player target = Bukkit.getServer().getPlayer(args[1]);
+					if (target == null) {
+						p.sendMessage(Utility.decodeMessage(("&cPlease Specify a proper player!")));
+						return true;
+					}
+
+					if (ArenaManager.getManager().isInGame(p)) {
+
+						p.sendMessage(Utility.messageToPlayer("&cYour are Already in a game!"));
+					
+						return true;
+					}
+					if (ArenaManager.getManager().isInGame(target)) {
+						p.sendMessage(Utility.messageToPlayer("&6" + target.getName() + " &cis already in a duel!"));
+						return true;
+					}
+					if (ArenaManager.getManager().addPlayers(p, target)) {
+						p.sendMessage(Utility.messageToPlayer("&bYou are fighting against&8: &6"+target.getDisplayName()+"&b!"));
+						target.sendMessage(Utility.messageToPlayer("&bYou are fighting against&8: &6"+p.getDisplayName()+"&b!"));
+					} else {
+						p.sendMessage(Utility.messageToPlayer("&cWait till other duels are finished!"));
+
+					}
+
+				}
 				if (args[0].equalsIgnoreCase("initiate") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;

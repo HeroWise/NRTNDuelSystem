@@ -1,16 +1,17 @@
 
 package com.topobon.duel.arena;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import com.topobon.duel.DuelNRTN;
 import com.topobon.duel.utils.ConfigManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 // Also NOT thread safe
 public class Arena {
@@ -22,7 +23,7 @@ public class Arena {
 	private boolean isEnabled;
 	private Location locA;
 	private Location locB;
-	private List<UUID> players = new ArrayList<UUID>();
+	private List<Player> players = new ArrayList<Player>();
 
 	public Arena(Location location1, Location location2, int id, String name) {
 		this.locA = location1;
@@ -37,15 +38,15 @@ public class Arena {
 		return this.id;
 	}
 
-	public List<UUID> getPlayers() {
-		return this.players;
+	public List<Player> getPlayers() {
+		return players;
 	}
 
 	public void load() {
 		loadName();
 		loadLocationA();
 		loadLocationB();
-
+		
 	}
 
 	public void loadLocationA() {
@@ -57,8 +58,18 @@ public class Arena {
 			double x = f.getDouble("location1.x");
 			double y = f.getDouble("location1.y");
 			double z = f.getDouble("location1.z");
-			World world = (World) f.get("location1.world");
+			World world = Bukkit.getWorld("world");
+			System.out.println("IT HAS HERE");
+			cm.saveConfig();
+			this.locA = new Location(world, x, y, z);
+		} else{
+			FileConfiguration f = cm.getConfig();
 
+			double x = f.getDouble("location1.x");
+			double y = f.getDouble("location1.y");
+			double z = f.getDouble("location1.z");
+			World world = Bukkit.getWorld("world");
+			System.out.println("IT HAS HERE");
 			cm.saveConfig();
 			this.locA = new Location(world, x, y, z);
 		}
@@ -73,7 +84,18 @@ public class Arena {
 			double x = f.getDouble("location2.x");
 			double y = f.getDouble("location2.y");
 			double z = f.getDouble("location2.z");
-			World world = (World) f.get("location2.world");
+			World world = Bukkit.getWorld("world");
+
+			cm.saveConfig();
+			this.locB = new Location(world, x, y, z);
+		} else {
+
+			FileConfiguration f = cm.getConfig();
+
+			double x = f.getDouble("location2.x");
+			double y = f.getDouble("location2.y");
+			double z = f.getDouble("location2.z");
+			World world = Bukkit.getWorld("world");
 
 			cm.saveConfig();
 			this.locB = new Location(world, x, y, z);
@@ -111,23 +133,23 @@ public class Arena {
 		Location l1 = location;
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
-			f.set("Arena-Name", null);
+			f.set("Arena-Name", getName());
 			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
-			f.set("location1.x", l1.getX());
+		
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
-			f.set("location1.z", l1.getY());
+			f.set("location1.z", l1.getZ());
 
 			cm.saveConfig();
 		} else {
-			f.set("Arena-Name", null);
+			f.set("Arena-Name", getName());
 			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
-			f.set("location1.x", l1.getX());
+		
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
-			f.set("location1.z", l1.getY());
+			f.set("location1.z", l1.getZ());
 
 			cm.saveConfig();
 		}
@@ -138,23 +160,23 @@ public class Arena {
 		Location l1 = location;
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
-			f.set("Arena-Name", null);
+			f.set("Arena-Name", getName());
 			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
-			f.set("location2.x", l1.getX());
+		
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());
-			f.set("location2.z", l1.getY());
+			f.set("location2.z", l1.getZ());
 
 			cm.saveConfig();
 		} else {
-			f.set("Arena-Name", null);
+			f.set("Arena-Name", getName());
 			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
-			f.set("location2.x", l1.getX());
+
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());
-			f.set("location2.z", l1.getY());
+			f.set("location2.z", l1.getZ());
 
 			cm.saveConfig();
 		}
