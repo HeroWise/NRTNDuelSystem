@@ -93,7 +93,7 @@ public class DuelNRTN extends JavaPlugin {
 			ArenaManager.getManager().arenaSize = arenaSize;
 			System.out.println(arenaSize);
 		}
-		
+		ArenaManager.getManager().loadArenas();
 	
 		//getConfig().addDefault("latestArena", 1);
 		setLogo(ChatColor.translateAlternateColorCodes('&', "&7&l[&6&lNaruto &c&lRTN&7&l] &r"));

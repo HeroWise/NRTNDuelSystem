@@ -59,7 +59,6 @@ public class ArenaManager {
 
 		return null; // Not found
 	}
-<<<<<<< HEAD
 	
 	public List<Arena> getAllArenas(){
 		return arenas;
@@ -102,8 +101,6 @@ public class ArenaManager {
 
 		}
 	}
-=======
->>>>>>> parent of 4e2dbd1... Added isEnable and setEnabled Methods
 
 	/**
 	 * Adds the player to an arena
@@ -208,27 +205,27 @@ public class ArenaManager {
 			// f.set("Arena-no", arenaSize);
 			f.set("Arena-Name", nameOfArena);
 			f.set("location1.x", l1.getX());
-			f.set("location1.x", l1.getX());
+
 			f.set("location1.y", l1.getY());
 			f.set("location1.z", l1.getY());
-			f.set("location1.world", l1.getWorld());
+
 			f.set("location2.x", l2.getX());
 			f.set("location2.y", l2.getY());
 			f.set("location2.z", l2.getY());
-			f.set("location2.world", l1.getWorld());
+
 			cm.saveConfig();
 		}
 		ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, 0);
 		if (!cm1.exists()) {
 			FileConfiguration f1 = cm1.getConfig();
 			f1.set("latestArena", arenaSize);
-		//	System.out.println("Set new Arena Size");
+			// System.out.println("Set new Arena Size");
 			cm1.saveConfig();
 		}
 		if (cm1.exists()) {
 			FileConfiguration f1 = cm1.getConfig();
 			f1.set("latestArena", arenaSize);
-			//System.out.println("Set new Arena Size");
+			// System.out.println("Set new Arena Size");
 			cm1.saveConfig();
 		}
 
