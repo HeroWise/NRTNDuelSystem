@@ -75,7 +75,7 @@ public class ArenaManager {
 		// ArenaManager.getManager().arenaSize = arenaSize;
 		// System.out.println(arenaSize);
 		// }
-		System.out.println(arenaSize+" aftermath21");
+	
 		
 		try {
 			for (int i = 1; i <= arenaSize; i++) {
@@ -89,7 +89,7 @@ public class ArenaManager {
 
 				// Temp locations
 				Arena a = new Arena(new Location(Bukkit.getWorld("FlatLands"), x, y, z),
-						new Location(Bukkit.getWorld("FlatLands"), x, y, z), i);
+						new Location(Bukkit.getWorld("FlatLands"), x, y, z), i, null);
 				a.load();
 				this.arenas.add(a);
 			}
@@ -186,13 +186,13 @@ public class ArenaManager {
 	 *            the location for arena spawn
 	 * @return the arena created
 	 */
-	public Arena createArena(Location l1, Location l2) {
+	public Arena createArena(Location l1, Location l2, String arenaName) {
 		
 		this.arenaSize++;
 
-		Arena a = new Arena(l1, l2, this.arenaSize);
+		Arena a = new Arena(l1, l2, this.arenaSize, arenaName);
 		this.arenas.add(a);
-	
+		a.setEnabled(false);
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance, arenaSize);
 		// System.out.println("test");
 		if (!cm.exists()) {
@@ -200,7 +200,8 @@ public class ArenaManager {
 			FileConfiguration f = cm.getConfig();
 			// f.set("Arena-object", a);
 			// f.set("Arena-no", arenaSize);
-			//f.set("Arena-Name", nameOfArena);
+			f.set("Arena-Name", arenaName);
+			f.set("isEnabled", false);
 			f.set("location1.x", l1.getX());
 
 			f.set("location1.y", l1.getY());

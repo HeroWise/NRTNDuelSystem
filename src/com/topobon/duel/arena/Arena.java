@@ -18,16 +18,17 @@ public class Arena {
 
 	// Ofc, this CAN'T be the ID COULD IT? (jk)
 	private final int id;
-//	private String name;
+	private String name;
 	private boolean isEnabled;
 	private Location locA;
 	private Location locB;
 	private List<UUID> players = new ArrayList<UUID>();
 
-	public Arena(Location location1, Location location2, int id) {
+	public Arena(Location location1, Location location2, int id, String name) {
 		this.locA = location1;
 		this.locB = location2;
 		this.id = id;
+		this.name = name;
 	}
 
 	// Getters
@@ -41,13 +42,14 @@ public class Arena {
 	}
 
 	public void load() {
+		loadName();
 		loadLocationA();
 		loadLocationB();
-		loadName();
+
 	}
-	
+
 	public void loadLocationA() {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance, id);
 		if (!cm.exists()) {
 
 			FileConfiguration f = cm.getConfig();
@@ -61,8 +63,9 @@ public class Arena {
 			this.locA = new Location(world, x, y, z);
 		}
 	}
+
 	public void loadLocationB() {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance, id);
 		if (!cm.exists()) {
 
 			FileConfiguration f = cm.getConfig();
@@ -76,62 +79,77 @@ public class Arena {
 			this.locB = new Location(world, x, y, z);
 		}
 	}
+
 	public void loadName() {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance, id);
 		if (!cm.exists()) {
 
 			FileConfiguration f = cm.getConfig();
-
-		//	name = f.getString("Arena-Name");
-			isEnabled = f.getBoolean("isEnabled");
 			
+			String arenaName = f.getString("Arena-Name");
+			boolean enabled = f.getBoolean("isEnabled");
+			
+			name = arenaName;
+			this.isEnabled = enabled;
 			cm.saveConfig();
+
+		} else {
+
+			FileConfiguration f = cm.getConfig();
 			
+			String arenaName = f.getString("Arena-Name");
+			boolean enabled = f.getBoolean("isEnabled");
+			
+			name = arenaName;
+			this.isEnabled = enabled;
+			cm.saveConfig();
 		}
 	}
+
 	public void setLocationA(Location location) {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance, id);
 		Location l1 = location;
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
-
-		//	f.set("Arena-Name", name);
+			f.set("Arena-Name", null);
+			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location1.x", l1.getX());
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
 			f.set("location1.z", l1.getY());
-	
+
 			cm.saveConfig();
 		} else {
-		//	f.set("Arena-Name", name);
+			f.set("Arena-Name", null);
+			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location1.x", l1.getX());
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
 			f.set("location1.z", l1.getY());
-	
-		
+
 			cm.saveConfig();
 		}
 	}
+
 	public void setLocationB(Location location) {
-		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance, id);
 		Location l1 = location;
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
-
-		//	f.set("Arena-Name", name);
+			f.set("Arena-Name", null);
+			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location2.x", l1.getX());
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());
 			f.set("location2.z", l1.getY());
-		
-		
+
 			cm.saveConfig();
 		} else {
-		//	f.set("Arena-Name", name);
+			f.set("Arena-Name", null);
+			// f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location2.x", l1.getX());
 			f.set("location2.x", l1.getX());
@@ -141,10 +159,6 @@ public class Arena {
 			cm.saveConfig();
 		}
 	}
-
-	
-	
-	
 
 	public Location getLocationA() {
 		return locA;
@@ -162,11 +176,11 @@ public class Arena {
 		this.isEnabled = isEnabled;
 	}
 
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

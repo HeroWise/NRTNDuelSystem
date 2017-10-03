@@ -38,14 +38,43 @@ public class DuelCommands implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("create") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-//					if (args.length < 2) {
-//						p.sendMessage(Utility.sendInfo("&4usage for command is: /d create <Name for Arena>"));
-//						return true;
-//					}
-					ArenaManager.getManager().createArena(p.getLocation(), p.getLocation().add(0, 0, 2));
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d create <Name for Arena>"));
+						return true;
+					}
+					ArenaManager.getManager().createArena(p.getLocation(), p.getLocation().add(0, 0, 2), args[1]);
 					p.sendMessage(Utility.sendInfo("&aSuccessfully created Arena!"));
 
-					p.sendMessage(Utility.sendInfo("This Arena's ID is: &6" + ArenaManager.getManager().arenaSize+"&r\n Please use this if you want to edit arena information!"));
+					p.sendMessage(Utility.sendInfo("This Arena's ID is: &6" + ArenaManager.getManager().arenaSize
+							+ "&r\n Please use this if you want to edit arena information!"));
+					// Create
+
+				}
+
+				if (args[0].equalsIgnoreCase("setName") && sender instanceof Player) {
+
+					Player p = (Player) sender;
+					if (args.length < 2) {
+						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setName <Name for Arena>"));
+						return true;
+					}
+					ArenaManager.getManager().getArena(Integer.valueOf(args[1])).setName(args[2]);
+					p.sendMessage(Utility.sendInfo("&aSuccessfully changed arena name to&8:&6 " + args[2]
+							+ " &r\nArena ID is&8: &6" + Integer.valueOf(args[1])));
+					ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, Integer.valueOf(args[1]));
+					if (!cm1.exists()) {
+						FileConfiguration f1 = cm1.getConfig();
+						f1.set("Arena-Name", args[2]);
+						// System.out.println("Set new Arena Size");
+						cm1.saveConfig();
+					}
+					if (cm1.exists()) {
+						FileConfiguration f1 = cm1.getConfig();
+						f1.set("Arena-Name", args[2]);
+						// System.out.println("Set new Arena Size");
+						cm1.saveConfig();
+					}
+					
 					// Create
 
 				}
@@ -53,7 +82,14 @@ public class DuelCommands implements CommandExecutor {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
 					for (Arena arena : ArenaManager.getManager().getAllArenas()) {
-						p.sendMessage(Utility.decodeMessage("&b " + arena.getId() + ""));
+						if (arena.isEnabled()) {
+							p.sendMessage(Utility.decodeMessage(
+									"&b " + arena.getId() + " &7- &6" + arena.getName() + " &8[&aEnabled&8] "));
+						} else {
+							p.sendMessage(Utility.decodeMessage(
+									"&b " + arena.getId() + " &7- &6" + arena.getName() + " &8[&cDisabled&8] "));
+						}
+
 					}
 					p.sendMessage(Utility.decodeMessage("&bare the Arena IDs"));
 
