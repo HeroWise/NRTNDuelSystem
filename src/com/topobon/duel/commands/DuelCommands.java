@@ -38,11 +38,11 @@ public class DuelCommands implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("create") && sender instanceof Player) {
 					Player pSender = (Player) sender;
 					Player p = (Player) sender;
-					if (args.length < 2) {
-						p.sendMessage(Utility.sendInfo("&4usage for command is: /d create <Name for Arena>"));
-						return true;
-					}
-					ArenaManager.getManager().createArena(args[1], p.getLocation(), p.getLocation().add(0, 0, 2));
+//					if (args.length < 2) {
+//						p.sendMessage(Utility.sendInfo("&4usage for command is: /d create <Name for Arena>"));
+//						return true;
+//					}
+					ArenaManager.getManager().createArena(p.getLocation(), p.getLocation().add(0, 0, 2));
 					p.sendMessage(Utility.sendInfo("&aSuccessfully created Arena!"));
 
 					p.sendMessage(Utility.sendInfo("This Arena's ID is: &6" + ArenaManager.getManager().arenaSize+"&r\n Please use this if you want to edit arena information!"));

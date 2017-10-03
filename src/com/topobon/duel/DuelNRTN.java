@@ -91,7 +91,7 @@ public class DuelNRTN extends JavaPlugin {
 			// System.out.println("test created");
 			int arenaSize = fc.getInt("latestArena");
 			ArenaManager.getManager().arenaSize = arenaSize;
-			System.out.println(arenaSize);
+			
 		}
 		ArenaManager.getManager().loadArenas();
 	

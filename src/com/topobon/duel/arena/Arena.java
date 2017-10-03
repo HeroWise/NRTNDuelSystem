@@ -18,7 +18,7 @@ public class Arena {
 
 	// Ofc, this CAN'T be the ID COULD IT? (jk)
 	private final int id;
-	private String name;
+//	private String name;
 	private boolean isEnabled;
 	private Location locA;
 	private Location locB;
@@ -43,6 +43,7 @@ public class Arena {
 	public void load() {
 		loadLocationA();
 		loadLocationB();
+		loadName();
 	}
 	
 	public void loadLocationA() {
@@ -81,7 +82,7 @@ public class Arena {
 
 			FileConfiguration f = cm.getConfig();
 
-			name = f.getString("Areba-Name");
+		//	name = f.getString("Arena-Name");
 			isEnabled = f.getBoolean("isEnabled");
 			
 			cm.saveConfig();
@@ -94,7 +95,7 @@ public class Arena {
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
 
-			f.set("Arena-Name", name);
+		//	f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location1.x", l1.getX());
 			f.set("location1.x", l1.getX());
@@ -103,7 +104,7 @@ public class Arena {
 	
 			cm.saveConfig();
 		} else {
-			f.set("Arena-Name", name);
+		//	f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location1.x", l1.getX());
 			f.set("location1.x", l1.getX());
@@ -120,7 +121,7 @@ public class Arena {
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
 
-			f.set("Arena-Name", name);
+		//	f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location2.x", l1.getX());
 			f.set("location2.x", l1.getX());
@@ -130,7 +131,7 @@ public class Arena {
 		
 			cm.saveConfig();
 		} else {
-			f.set("Arena-Name", name);
+		//	f.set("Arena-Name", name);
 			f.set("isEnabled", false);
 			f.set("location2.x", l1.getX());
 			f.set("location2.x", l1.getX());
@@ -161,11 +162,11 @@ public class Arena {
 		this.isEnabled = isEnabled;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+//	public String getName() {
+//		return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
 }
