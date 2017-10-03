@@ -41,12 +41,17 @@ public class Arena {
 	}
 
 	public void load() {
+<<<<<<< HEAD
 		loadLocationA();
 		loadLocationB();
 		loadName();
+=======
+		setLocationA();
+		setLocationB();
+>>>>>>> parent of 4e2dbd1... Added isEnable and setEnabled Methods
 	}
-	
-	public void loadLocationA() {
+
+	public void setLocationA() {
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
 		if (!cm.exists()) {
 
@@ -61,6 +66,7 @@ public class Arena {
 			this.locA = new Location(world, x, y, z);
 		}
 	}
+<<<<<<< HEAD
 	public void loadLocationB() {
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
 		if (!cm.exists()) {
@@ -145,6 +151,24 @@ public class Arena {
 	
 	
 	
+=======
+
+	public void setLocationB() {
+		ConfigManager cm = new ConfigManager(DuelNRTN.instance,id);
+		if (!cm.exists()) {
+
+			FileConfiguration f = cm.getConfig();
+
+			double x = f.getDouble("location2.x");
+			double y = f.getDouble("location2.y");
+			double z = f.getDouble("location2.z");
+			World world = (World) f.get("location2.world");
+
+			cm.saveConfig();
+			this.locB = new Location(world, x, y, z);
+		}
+	}
+>>>>>>> parent of 4e2dbd1... Added isEnable and setEnabled Methods
 
 	public Location getLocationA() {
 		return locA;
@@ -153,6 +177,7 @@ public class Arena {
 	public Location getLocationB() {
 		return locB;
 	}
+<<<<<<< HEAD
 
 	public boolean isEnabled() {
 		return isEnabled;
@@ -169,4 +194,6 @@ public class Arena {
 	public void setName(String name) {
 		this.name = name;
 	}
+=======
+>>>>>>> parent of 4e2dbd1... Added isEnable and setEnabled Methods
 }
