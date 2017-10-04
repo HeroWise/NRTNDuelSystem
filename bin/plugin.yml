@@ -4,7 +4,7 @@ author: HeroWise
 version: 1
 
 commands:
-  duel:
-    description: Your description
-    usage: /duel
-    aliases: d
+  nduel:
+    description: duel opponents!
+    usage: /nduel
+    aliases: nd

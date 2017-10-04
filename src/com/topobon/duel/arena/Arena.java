@@ -23,6 +23,7 @@ public class Arena {
 	private boolean isEnabled;
 	private Location locA;
 	private Location locB;
+	World world = Bukkit.getWorld("flatland");
 	private List<Player> players = new ArrayList<Player>();
 
 	public Arena(Location location1, Location location2, int id, String name) {
@@ -58,8 +59,8 @@ public class Arena {
 			double x = f.getDouble("location1.x");
 			double y = f.getDouble("location1.y");
 			double z = f.getDouble("location1.z");
-			World world = Bukkit.getWorld("world");
-			System.out.println("IT HAS HERE");
+			
+		
 			cm.saveConfig();
 			this.locA = new Location(world, x, y, z);
 		} else{
@@ -68,8 +69,8 @@ public class Arena {
 			double x = f.getDouble("location1.x");
 			double y = f.getDouble("location1.y");
 			double z = f.getDouble("location1.z");
-			World world = Bukkit.getWorld("world");
-			System.out.println("IT HAS HERE");
+		
+	
 			cm.saveConfig();
 			this.locA = new Location(world, x, y, z);
 		}
@@ -84,7 +85,8 @@ public class Arena {
 			double x = f.getDouble("location2.x");
 			double y = f.getDouble("location2.y");
 			double z = f.getDouble("location2.z");
-			World world = Bukkit.getWorld("world");
+			
+
 
 			cm.saveConfig();
 			this.locB = new Location(world, x, y, z);
@@ -95,7 +97,7 @@ public class Arena {
 			double x = f.getDouble("location2.x");
 			double y = f.getDouble("location2.y");
 			double z = f.getDouble("location2.z");
-			World world = Bukkit.getWorld("world");
+		
 
 			cm.saveConfig();
 			this.locB = new Location(world, x, y, z);
@@ -134,8 +136,8 @@ public class Arena {
 		FileConfiguration f = cm.getConfig();
 		if (!cm.exists()) {
 			f.set("Arena-Name", getName());
-			// f.set("Arena-Name", name);
-			f.set("isEnabled", false);
+			
+		//	f.set("isEnabled", false);
 		
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
@@ -144,8 +146,8 @@ public class Arena {
 			cm.saveConfig();
 		} else {
 			f.set("Arena-Name", getName());
-			// f.set("Arena-Name", name);
-			f.set("isEnabled", false);
+		
+		//	f.set("isEnabled", false);
 		
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
@@ -162,7 +164,7 @@ public class Arena {
 		if (!cm.exists()) {
 			f.set("Arena-Name", getName());
 			// f.set("Arena-Name", name);
-			f.set("isEnabled", false);
+			//f.set("isEnabled", false);
 		
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());
@@ -171,8 +173,8 @@ public class Arena {
 			cm.saveConfig();
 		} else {
 			f.set("Arena-Name", getName());
-			// f.set("Arena-Name", name);
-			f.set("isEnabled", false);
+			
+		//	f.set("isEnabled", false);
 
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());

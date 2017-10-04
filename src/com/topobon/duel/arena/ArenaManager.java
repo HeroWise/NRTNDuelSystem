@@ -88,8 +88,8 @@ public class ArenaManager {
 				double z = 0;
 
 				// Temp locations
-				Arena a = new Arena(new Location(Bukkit.getWorld("world"), x, y, z),
-						new Location(Bukkit.getWorld("world"), x, y, z), i, null);
+				Arena a = new Arena(new Location(Bukkit.getWorld("flatland"), x, y, z),
+						new Location(Bukkit.getWorld("flatland"), x, y, z), i, null);
 				a.load();
 				this.arenas.add(a);
 			}
@@ -101,12 +101,32 @@ public class ArenaManager {
 	public Boolean addPlayers(Player player1, Player player2) {
 		for (Arena a : arenas) {
 			if (a.getPlayers().isEmpty()) {
+				ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, a.getId());
+				if (!cm1.exists()) {
+					FileConfiguration f1 = cm1.getConfig();
+					boolean enabled = f1.getBoolean("isEnabled");
+					if(enabled){
+						addPlayer(player1, player2, a.getId());
+						return true;
+					}
+					
+					cm1.saveConfig();
+				}
+				if (cm1.exists()) {
+					FileConfiguration f1 = cm1.getConfig();
+					boolean enabled = f1.getBoolean("isEnabled");
+					if(enabled){
+						addPlayer(player1, player2, a.getId());
+						return true;
+					}
+					// System.out.println("Set new Arena Size");
+					cm1.saveConfig();
+				}
 				
 				
-				
-				addPlayer(player1, player2, a.getId());
-
-				return true;
+//				addPlayer(player1, player2, a.getId());
+//
+//				return true;
 			}
 		}
 		return false;
@@ -185,8 +205,8 @@ public class ArenaManager {
 		a.getPlayers().remove(p);
 
 		// Teleport to original location, remove it too
-		p.teleport(locs.get(p));
-		locs.remove(p);
+		//p.teleport(locs.get(p));
+		//locs.remove(p);
 
 		// Heh, you're safe now :)
 		p.setFireTicks(0);
@@ -267,7 +287,7 @@ public class ArenaManager {
 	}
 
 	public String serializeLoc(Location l) {
-		return l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
+		return l.getWorld().getName() + ", " + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ();
 	}
 
 	public Location deserializeLoc(String s) {

@@ -1,5 +1,8 @@
 package com.topobon.duel;
 
+import java.util.ArrayList;
+import java.util.Timer;
+
 /**
  * Copyright (c) 2017, HeroWise. All rights reserved.
  *
@@ -36,7 +39,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.topobon.duel.arena.ArenaManager;
 import com.topobon.duel.commands.DuelCommands;
+import com.topobon.duel.events.CommandPreprocessEvent;
 import com.topobon.duel.events.PlayerDeath;
+import com.topobon.duel.events.PlayerLeave;
 import com.topobon.duel.utils.ConfigManager;
 
 /**
@@ -65,6 +70,7 @@ public class DuelNRTN extends JavaPlugin {
 
 	private static Logo infoLogo;
 	public static DuelNRTN instance;
+	private static ArrayList<String> cmd;
 
 	/**
 	 * Method: Calls when class runs {@link #getPluginLoader()}
@@ -83,8 +89,10 @@ public class DuelNRTN extends JavaPlugin {
 		// new TeamDeathMatch(this);
 		// new GameManager(this);
 		instance = this;
-		
-//
+		cmd = new ArrayList<String>();
+		setCommands();
+		//
+
 		ConfigManager cm = new ConfigManager(DuelNRTN.instance, 0);
 		// System.out.println("test");
 		if (cm.exists()) {
@@ -92,27 +100,27 @@ public class DuelNRTN extends JavaPlugin {
 			// System.out.println("test created");
 			int arenaSize = fc.getInt("latestArena");
 			ArenaManager.getManager().arenaSize = arenaSize;
-			
+
 		}
 		ArenaManager.getManager().loadArenas();
-	
-		//getConfig().addDefault("latestArena", 1);
+
+		// getConfig().addDefault("latestArena", 1);
 		setLogo(ChatColor.translateAlternateColorCodes('&', "&7&l[&6&lNaruto &c&lRTN&7&l] &r"));
 		setInfoLogo(ChatColor.translateAlternateColorCodes('&', "&8&l[&6Info&8&l] &r"));
 		/**
 		 * Talks about the TDM plugin and its state
 		 * 
 		 */
-	
+		System.out.println("Arena Configurations initialized!");
+		
+		new com.topobon.duel.gameprocessing.Timer(this);
 		// Registering Commands
-		this.getCommand("duel").setExecutor(new DuelCommands(this));
+		this.getCommand("nduel").setExecutor(new DuelCommands(this));
 		// Registering Events
-		 Bukkit.getPluginManager().registerEvents(new PlayerDeath(this), this);
-		
-		
-	}
-	
-
+		Bukkit.getPluginManager().registerEvents(new PlayerDeath(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
+		Bukkit.getPluginManager().registerEvents(new CommandPreprocessEvent(this), this);
+	}	
 
 	/**
 	 * Method: returns logo Object and calls #getLogo() Method from the
@@ -123,6 +131,21 @@ public class DuelNRTN extends JavaPlugin {
 	public static String getInitials() {
 
 		return logo.getLogo();
+	}
+
+	/**
+	 * Method: returns logo Object and calls #getLogo() Method from the
+	 * {@linkplain Logo.class}
+	 * 
+	 * @return Logo Object to #getLogo()
+	 */
+	private void setCommands() {
+		cmd.add("spawn");
+		cmd.add("home");
+		cmd.add("heal");
+		cmd.add("back");
+		cmd.add("eheal");
+
 	}
 
 	/**
@@ -152,6 +175,14 @@ public class DuelNRTN extends JavaPlugin {
 	 */
 	public static void setInfoLogo(String string) {
 		infoLogo = new Logo(string);
+	}
+
+	public static ArrayList<String> getBannedCommands() {
+		return cmd;
+	}
+
+	public static void setBannedCommands(ArrayList<String> cmd) {
+		DuelNRTN.cmd = cmd;
 	}
 
 }
