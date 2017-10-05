@@ -36,7 +36,7 @@ public class DuelCommands implements CommandExecutor {
 					player.sendMessage(Utility.messageToPlayer("&7/&c&lnd &8- &aa <player> &8- &bAccept duel request"));
 					player.sendMessage(Utility.messageToPlayer("&8&m=============================="));
 				} else {
-					RequestManager.getManager().iterateValues();
+					
 					player.sendMessage(Utility.messageToPlayer(("&8&m========&b&lArena configuration&8&m========")));
 					player.sendMessage(Utility.messageToPlayer("&7/&c&lnd &8- &acreate <name>"));
 					player.sendMessage(Utility.messageToPlayer("&7/&c&lnd &8- &asetName <id>"));
@@ -96,7 +96,7 @@ public class DuelCommands implements CommandExecutor {
 
 				}
 				if (args[0].equalsIgnoreCase("list") && sender instanceof Player) {
-				
+
 					Player p = (Player) sender;
 					for (Arena arena : ArenaManager.getManager().getAllArenas()) {
 						if (arena.isEnabled()) {
@@ -114,11 +114,18 @@ public class DuelCommands implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("stateloc") && sender instanceof Player) {
 
 					Player p = (Player) sender;
-
-					p.sendMessage(Utility.decodeMessage("&bA: " + ArenaManager.getManager().serializeLoc(
-							ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationA())));
-					p.sendMessage(Utility.decodeMessage("&bB: " + ArenaManager.getManager().serializeLoc(
-							ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationB())));
+					try {
+						p.sendMessage(Utility.decodeMessage("&bA: " + ArenaManager.getManager().serializeLoc(
+								ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationA())));
+						p.sendMessage(Utility.decodeMessage("&bB: " + ArenaManager.getManager().serializeLoc(
+								ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationB())));
+					} catch (NullPointerException e) {
+						System.out.println("NPE is found! So Showing default Location!");
+						p.sendMessage(Utility.decodeMessage(
+								"&bA: " + ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationA()));
+						p.sendMessage(Utility.decodeMessage(
+								"&bB: " + ArenaManager.getManager().getArena(Integer.valueOf(args[1])).getLocationB()));
+					}
 				}
 
 				if (args[0].equalsIgnoreCase("enable") && sender instanceof Player) {
@@ -128,6 +135,7 @@ public class DuelCommands implements CommandExecutor {
 						p.sendMessage(Utility.sendInfo("&4Usage for command is: /d setName <Name for Arena>"));
 						return true;
 					}
+					try{
 					ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, Integer.valueOf(args[1]));
 					if (!cm1.exists()) {
 						FileConfiguration f1 = cm1.getConfig();
@@ -145,33 +153,39 @@ public class DuelCommands implements CommandExecutor {
 						cm1.saveConfig();
 						p.sendMessage(Utility.sendInfo("&aSuccessfully enabled &6" + Integer.valueOf(args[1]) + "&b!"));
 					}
-
+					} catch(Exception e){
+						p.sendMessage(Utility.sendInfo("&4Please Insert a proper ID for the arena as the one provided either doesnt exist or isn't a proper Integer value!"));
+					}
 				}
 
 				// FIX
 				if (args[0].equalsIgnoreCase("disable") && sender instanceof Player) {
-					Player pSender = (Player) sender;
+
 					Player p = (Player) sender;
 					if (args.length < 2) {
 						p.sendMessage(Utility.sendInfo("&4Usage for command is: /nd setName <Name for Arena>"));
 						return true;
 					}
-					ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, Integer.valueOf(args[1]));
-					if (!cm1.exists()) {
-						FileConfiguration f1 = cm1.getConfig();
-						f1.set("isEnabled", false);
-						p.sendMessage(
-								Utility.sendInfo("&aSuccessfully disabled &6" + Integer.valueOf(args[1]) + "&b!"));
-						ArenaManager.getManager().getArena(Integer.valueOf(args[1])).setEnabled(false);
-						cm1.saveConfig();
-					}
-					if (cm1.exists()) {
-						FileConfiguration f1 = cm1.getConfig();
-						f1.set("isEnabled", false);
-						p.sendMessage(
-								Utility.sendInfo("&aSuccessfully disabled &6" + Integer.valueOf(args[1]) + "&b!"));
-						ArenaManager.getManager().getArena(Integer.valueOf(args[1])).setEnabled(false);
-						cm1.saveConfig();
+					try {
+						ConfigManager cm1 = new ConfigManager(DuelNRTN.instance, Integer.valueOf(args[1]));
+						if (!cm1.exists()) {
+							FileConfiguration f1 = cm1.getConfig();
+							f1.set("isEnabled", false);
+							p.sendMessage(
+									Utility.sendInfo("&aSuccessfully disabled &6" + Integer.valueOf(args[1]) + "&b!"));
+							ArenaManager.getManager().getArena(Integer.valueOf(args[1])).setEnabled(false);
+							cm1.saveConfig();
+						}
+						if (cm1.exists()) {
+							FileConfiguration f1 = cm1.getConfig();
+							f1.set("isEnabled", false);
+							p.sendMessage(
+									Utility.sendInfo("&aSuccessfully disabled &6" + Integer.valueOf(args[1]) + "&b!"));
+							ArenaManager.getManager().getArena(Integer.valueOf(args[1])).setEnabled(false);
+							cm1.saveConfig();
+						}
+					} catch(Exception e){
+						p.sendMessage(Utility.sendInfo("&4Please Insert a proper ID for the arena as the one provided either doesnt exist or isn't a proper Integer value!"));
 					}
 
 				}
@@ -229,7 +243,7 @@ public class DuelCommands implements CommandExecutor {
 				}
 
 				if (args[0].equalsIgnoreCase("initiate") && sender instanceof Player) {
-					Player pSender = (Player) sender;
+
 					Player p = (Player) sender;
 					p.sendMessage(
 							Utility.sendInfo("&aInitiated Duel plugin! Instantiating DefaultArenaConfig with id '0'"));
@@ -238,40 +252,50 @@ public class DuelCommands implements CommandExecutor {
 					if (!cm1.exists()) {
 						FileConfiguration f1 = cm1.getConfig();
 						f1.set("latestArena", 0);
-						// System.out.println("Set new Arena Size");
+
 						cm1.saveConfig();
 					}
 					if (cm1.exists()) {
 						FileConfiguration f1 = cm1.getConfig();
 						f1.set("latestArena", ArenaManager.getManager().arenaSize);
-						// System.out.println("Set new Arena Size");
+
 						cm1.saveConfig();
 					}
 
 				}
 
 				if (args[0].equalsIgnoreCase("setLocationA") && sender instanceof Player) {
-					Player pSender = (Player) sender;
+
 					Player p = (Player) sender;
 					if (args.length < 2) {
-						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setLocationA <id for arena>"));
+						p.sendMessage(Utility.sendInfo("&4Usage for command is: /d setLocationA <id for arena>"));
 						return true;
 					}
-					Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
-					arena.setLocationA(p.getLocation());
-					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location A for Arena: " + args[1]));
+					try {
+						Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
+						arena.setLocationA(p.getLocation());
+						p.sendMessage(Utility.sendInfo("&aSuccessfully set Location A for Arena: " + args[1]));
+					} catch (NullPointerException e) {
+						p.sendMessage(Utility.sendInfo(
+								"&4Please Insert a proper ID for the arena as the one provided either doesnt exist or isn't a proper Integer value!"));
+					}
 
 				}
 				if (args[0].equalsIgnoreCase("setLocationB") && sender instanceof Player) {
-					Player pSender = (Player) sender;
+
 					Player p = (Player) sender;
 					if (args.length < 2) {
-						p.sendMessage(Utility.sendInfo("&4usage for command is: /d setLocationB <id for arena>"));
+						p.sendMessage(Utility.sendInfo("&4Usage for command is: /d setLocationB <id for arena>"));
 						return true;
 					}
-					Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
-					arena.setLocationB(p.getLocation());
-					p.sendMessage(Utility.sendInfo("&aSuccessfully set Location B for Arena: " + args[1]));
+					try {
+						Arena arena = ArenaManager.getManager().getArena(Integer.valueOf(args[1]));
+						arena.setLocationB(p.getLocation());
+						p.sendMessage(Utility.sendInfo("&aSuccessfully set Location B for Arena: " + args[1]));
+					} catch (NullPointerException e) {
+						p.sendMessage(Utility.sendInfo(
+								"&4Please Insert a proper ID for the arena as the one provided either doesnt exist or isn't a proper Integer value!"));
+					}
 
 				}
 

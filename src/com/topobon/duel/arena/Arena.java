@@ -23,7 +23,7 @@ public class Arena {
 	private boolean isEnabled;
 	private Location locA;
 	private Location locB;
-	World world = Bukkit.getWorld("flatland");
+	World world = Bukkit.getWorld("world");
 	private List<Player> players = new ArrayList<Player>();
 
 	public Arena(Location location1, Location location2, int id, String name) {
@@ -142,12 +142,12 @@ public class Arena {
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
 			f.set("location1.z", l1.getZ());
-
+			this.locA = location;
 			cm.saveConfig();
 		} else {
 			f.set("Arena-Name", getName());
 		
-		//	f.set("isEnabled", false);
+			this.locA = location;;
 		
 			f.set("location1.x", l1.getX());
 			f.set("location1.y", l1.getY());
@@ -165,7 +165,7 @@ public class Arena {
 			f.set("Arena-Name", getName());
 			// f.set("Arena-Name", name);
 			//f.set("isEnabled", false);
-		
+			this.locB = location;
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());
 			f.set("location2.z", l1.getZ());
@@ -175,7 +175,7 @@ public class Arena {
 			f.set("Arena-Name", getName());
 			
 		//	f.set("isEnabled", false);
-
+			this.locB = location;
 			f.set("location2.x", l1.getX());
 			f.set("location2.y", l1.getY());
 			f.set("location2.z", l1.getZ());
